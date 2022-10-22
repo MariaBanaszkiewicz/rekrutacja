@@ -1,5 +1,9 @@
 package pl.akai;
 
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+
 public class Main {
 
     private static String[] sentences = {
@@ -30,7 +34,49 @@ public class Main {
                 2. "tak" - 5
                 3. "z" - 2
         */
-        System.out.println("Hello world");
+        Map<String, Integer> Words = new HashMap<String, Integer>();
+
+        for(String el : sentences){
+            String[] arr = el.split(" ");
+            for(String word : arr){
+                Words.merge(word.toLowerCase(),1,Integer::sum);
+            }
+        }
+        Integer top1val = 0;
+        String top1key = "";
+
+        Integer top2val = 0;
+        String top2key = "";
+
+        Integer top3val = 0;
+        String top3key = "";
+
+        for(Map.Entry<String, Integer> w : Words.entrySet()){
+            Integer val = w.getValue();
+            if (val>top3val){
+                if (val>top2val){
+                    top3val = top2val;
+                    top3key = top2key;
+                    if(val>top1val){
+                        top2val = top1val;
+                        top2key = top1key;
+                        top1val = val;
+                        top1key = w.getKey();
+                    } else {
+                        top2val = val;
+                        top2key = w.getKey();
+                    }
+                } else {
+                    top3val = val;
+                    top3key = w.getKey();
+                }
+            }
+        }
+
+
+        System.out.println("1. "+top1key+" - "+top1val+"\n" +
+                "2. "+top2key+" - "+top2val+"\n" +
+                "3. "+top3key+" - "+top3val);
     }
 
 }
